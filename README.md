@@ -1,6 +1,6 @@
 # README
 
-##Getting started with docker
+## Getting started with docker
 
 Requirements:
 
@@ -28,9 +28,15 @@ Or you can start a bash console and run the server manually:
 
 ```
 docker-compose run --rm --service-ports web /bin/bash
-rspec
 ```
 
-##Chrome debugging
+Run specs
+```
+docker-compose run --rm web bash -c "bundle exec rake spec"
+```
+
+## Chrome debugging
 
 Connect to localhost:5900 with vnc client.
+
+When you are prompted for the password it is secret
