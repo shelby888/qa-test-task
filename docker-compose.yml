@@ -1,0 +1,36 @@
+version: '2'
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app:cached
+      - ~/.ssh:/root/.ssh
+      - ~/.bash_history:/root/.bash_history
+    ports:
+      - 3000:3000
+      - 3001:3001
+    links:
+      - db
+      - chrome
+    command: /bin/bash -c 'bundle exec rails s -p 3000 -b 0.0.0.0'
+    environment: &environment
+      DATABASE_HOST: db
+      DATABASE_USERNAME: postgres
+      BUNDLE_PATH: /bundle_cache
+      SELENIUM_REMOTE_HOST: chrome
+      CAPYBARA_SERVER_PORT: 3001
+    volumes_from:
+      - bundle_cache
+
+  db:
+    image: postgres:9.4.4
+
+  bundle_cache:
+    image: busybox
+    volumes:
+      - /bundle_cache
+
+  chrome:
+    image: selenium/standalone-chrome-debug:3.4.0-einsteinium
+    ports:
+      - 5900:5900
