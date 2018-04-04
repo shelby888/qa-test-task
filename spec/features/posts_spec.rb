@@ -4,6 +4,7 @@ describe 'Posts spec' do
   let(:posts_page) { PostsPage.new }
   let(:new_post_page) { NewPostPage.new }
   let(:post_page) { PostPage.new }
+  let(:edit_post_page) { EditPostPage.new }
 #  let(:post) { create :post }
 
   it 'Open posts list' do
@@ -89,5 +90,31 @@ describe 'Posts spec' do
     click_link 'Destroy'
     page.driver.browser.switch_to.alert.dismiss
     expect(page).to have_xpath(".//tbody/tr", :count =>1)
+  end
+
+  # Проверяет сообщение после успешного редактирования
+  it 'should check message after editing' do
+    post = create :post, title: 'test title'
+    visit("/posts/#{post.id}/edit")
+    edit_post_page.update_post_button.click
+    expect(post_page.notice).to have_content('Post was successfully updated.')
+  end
+
+  # Проверяет что заголовок изменился после редактирования
+  it 'should check saving title after editing' do
+    post = create :post, title: 'test title'
+    visit("/posts/#{post.id}/edit")
+    edit_post_page.title_field.set 'Updated Title'
+    edit_post_page.update_post_button.click
+    expect(find(:xpath, ".//p[2]")).to have_content('Updated Title')
+  end
+
+  # Проверяет что заголовок изменился после редактирования
+  it 'should check saving body after editing' do
+    post = create :post, title: 'test title', body: 'qwerty'
+    visit("/posts/#{post.id}/edit")
+    edit_post_page.body_field.set 'Asdfg'
+    edit_post_page.update_post_button.click
+    expect(find(:xpath, ".//p[3]")).to have_content('Asdfg')
   end
 end
