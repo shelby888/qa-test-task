@@ -109,7 +109,7 @@ describe 'Posts spec' do
     expect(find(:xpath, ".//p[2]")).to have_content('Updated Title')
   end
 
-  # Проверяет что заголовок изменился после редактирования
+  # Проверяет что тело изменилось после редактирования
   it 'should check saving body after editing' do
     post = create :post, title: 'test title', body: 'qwerty'
     visit("/posts/#{post.id}/edit")
